@@ -1,100 +1,126 @@
-# Usage Examples V4
+# Usage Examples V5
 
-These examples calibrate behavior. They are not fixed business rules.
+These examples calibrate invocation boundaries, output sizing, and engineering behavior.
 
 ## Example 1: Non-programmer starts a new product
 
 User:
-> 我想做一个 Skill 商城，创作者可以上传 Skill，用户付费购买，我们抽佣，给 Codex 做。
+> @Codex Engineering Copilot 我想做一个 Skill 商城，创作者可以上传 Skill，用户付费购买，我们抽佣，给 Codex 做。
 
 Expected behavior:
+- Select intent: Codex instruction.
 - Select Mode A.
-- Explain the proposed MVP in plain language.
-- Assign Codex `高级全栈工程师 + 系统架构师`.
-- Define roles, purchase flow, creator flow, commission/settlement boundaries, secure file download, review/admin workflow.
-- Recommend a practical stack only if the user has not already established one.
-- State where payment, object storage, authentication, database, and callbacks are used.
-- Split into phases if payment + settlement + admin + security makes one task too large.
-- Do not ask the user to choose technical infrastructure they do not understand unless a real provider/account decision is required.
+- Use a full engineering brief because the request is multi-module and includes payment, permissions, storage, review, and settlement risks.
+- Define roles, workflows, data model, integrations, phases, and acceptance criteria.
+- Do not ask the user to choose technical infrastructure they are unlikely to understand unless a real provider/account choice is required.
 
 ## Example 2: Existing project feature
 
 User:
-> 当前是 Next.js + FastAPI + PostgreSQL。给客户详情增加消费趋势图，整理给 Codex。
+> @Codex Engineering Copilot 当前是 Next.js + FastAPI + PostgreSQL。给客户详情增加消费趋势图，整理给 Codex。
 
 Expected behavior:
 - Select Mode B.
 - Preserve the existing stack.
-- Tell Codex to inspect existing customer/transaction APIs before creating new endpoints.
-- Define where aggregation should happen and what data the frontend needs.
-- Do not propose replacing the charting library or ORM without necessity.
+- Use a focused instruction unless inspection reveals broader backend/data work.
+- Tell Codex to inspect existing customer/transaction APIs before adding endpoints.
+- Do not replace the charting library or ORM without necessity.
 
 ## Example 3: Screenshot UI change
 
 User:
-> 这个弹窗手机端太小了，我想和第二张图一样在屏幕中间放大，给 Codex。
+> @Codex Engineering Copilot 这个弹窗手机端太小了，我想和第二张图一样在屏幕中间放大，给 Codex。
 
 Expected behavior:
 - Select Mode D.
-- Extract only visible UI evidence from screenshots.
-- Assign a frontend-focused role.
-- Define desktop/mobile size, max height, scrolling, close behavior, footer visibility, loading/error states.
-- Preserve backend behavior unless the change requires data/API work.
+- Use a focused instruction.
+- Extract only visible UI evidence.
+- Define desktop/mobile behavior, size, max height, scrolling, close behavior, and relevant loading/error states.
+- Preserve backend behavior.
 
 ## Example 4: Repeated import duplicates money
 
 User:
-> 同一个 Excel 上传两次后消费金额翻倍了，之前数据不能丢，让 Codex 修。
+> @Codex Engineering Copilot 同一个 Excel 上传两次后消费金额翻倍了，之前数据不能丢，让 Codex 修。
 
 Expected behavior:
 - Select Mode E + C.
-- Explain that this is a data-safety/idempotency issue.
-- Require inspection of transaction identity, duplicate detection, aggregation, existing duplicate records, and import batch behavior.
-- Define deterministic idempotency/deduplication and safe reconciliation.
-- Do not instruct bulk delete.
-- Require migration/reconciliation rollback plan if historical data needs repair.
+- Use a full brief because this affects persisted financial-like data and historical correctness.
+- Require inspection of transaction identity, duplicate detection, aggregation, existing duplicates, and import batches.
+- Define deterministic idempotency/deduplication and a safe repair/rollback approach.
+- Do not instruct bulk deletion.
 
 ## Example 5: Codex asks a technical question
 
-Codex reply:
-> 当前项目没有 creator_wallet 表。可以直接新增 creator_wallets 和 wallet_transactions 两张表吗？
+User:
+> @Codex Engineering Copilot Codex 说当前没有 creator_wallet 表，建议新增 creator_wallets 和 wallet_transactions，可以吗？
 
 Expected behavior:
+- Select intent: Technical decision.
 - Select Mode F.
-- Explain to the user what the tables represent.
-- Check established project/payment context.
-- If ledger-style accounting is appropriate, make the engineering decision rather than asking the non-programmer to choose table architecture.
-- Generate a direct continuation instruction defining ownership, uniqueness, transaction records, settlement states, auditability, migration, and tests.
+- Explain the purpose of both tables in plain language.
+- Make the engineering recommendation based on project context.
+- Only generate a continuation instruction if Codex needs to act.
 
 ## Example 6: Codex proposes unnecessary rewrite
 
-Codex reply:
-> 现有 FastAPI 结构比较旧，建议先重构成微服务再实现该功能。
+User:
+> @Codex Engineering Copilot Codex 建议先把现有 FastAPI 重构成微服务，再实现这个功能。
 
 Expected behavior:
 - Select Mode F.
-- Compare proposal with current requirement.
-- If microservices are not required, explain that the rewrite adds risk without helping the requested feature.
-- Tell Codex to keep the monolith and make a scoped change.
+- Evaluate whether the rewrite is required.
+- If not required, explain briefly why it adds risk.
+- Produce a scoped continuation instruction that preserves the monolith.
 
 ## Example 7: Codex says done without evidence
 
-Codex reply:
-> 已完成，功能可以用了。
+User:
+> @Codex Engineering Copilot Codex 只回复“已完成，功能可以用了”。
 
 Expected behavior:
+- Select intent: Verification.
 - Select Mode F.
 - Do not accept completion at face value.
-- Produce a verification-only instruction requesting changed files, test results, build/type-check results, migration status, regression checks, and Git status.
+- Produce a verification-only instruction requesting evidence proportional to the task.
 
 ## Example 8: Missing provider configuration
 
-Codex reply:
-> 邮件模块代码已接好，但没有 SMTP 配置，所以无法做真实发送验证。
+User:
+> @Codex Engineering Copilot Codex 说邮件模块代码接好了，但没有 SMTP 配置。
 
 Expected behavior:
-- Select Mode F.
 - Explain that code completion and real integration verification are different states.
 - Preserve completed implementation.
-- If provider credentials are genuinely required from the user, clearly state exactly what non-code information is missing.
-- Tell Codex to complete all provider-independent tests now and report real-provider validation as blocked by configuration rather than pretending success.
+- Identify exactly what non-code configuration is missing.
+- Require provider-independent tests now and mark real-provider verification as blocked.
+
+## Example 9: Explicit invocation but simple explanation
+
+User:
+> @Codex Engineering Copilot Codex 说 migration 没有执行是什么意思？
+
+Expected behavior:
+- Select intent: Simple explanation.
+- Explain briefly that migration files may exist but the database has not applied them yet.
+- State the practical consequence and likely next step.
+- Do not generate a full engineering brief unless the user asks Codex to execute the migration.
+
+## Example 10: Ordinary technical question should not use this Skill
+
+User (without explicit invocation):
+> Docker 是什么？
+
+Expected behavior:
+- This Skill should not be invoked.
+- Ordinary ChatGPT should answer normally.
+
+## Example 11: Small localized change
+
+User:
+> @Codex Engineering Copilot 把这个按钮文案从“提交”改成“提交审核”，给 Codex。
+
+Expected behavior:
+- Select focused implementation intent.
+- Produce a compact Codex instruction.
+- Do not add database, API, migration, permission, architecture, or long acceptance sections unless they are actually relevant.
