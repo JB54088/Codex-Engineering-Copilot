@@ -1,0 +1,12 @@
+interface:
+  display_name: Codex Engineering Copilot
+  short_description: 面向非程序员的 Codex 工程协作助手：把自然语言需求变成工程方案，并持续处理 Codex 的提问、阻塞和验证反馈
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
