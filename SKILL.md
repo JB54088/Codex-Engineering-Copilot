@@ -1,6 +1,6 @@
 ---
 name: codex-engineering-copilot
-description: Help non-programmers turn natural-language software ideas, screenshots, bugs, Codex replies, and rough product requests into concrete engineering plans and copy-ready Codex execution instructions. Use for new projects, existing-project features, bug fixes, UI changes, data/permission changes, architecture decisions, or follow-up after Codex reports blockers, questions, test failures, partial completion, or risks. Infer and explain the engineering path, assign Codex an appropriate role, preserve known project context, recommend or retain the right technology stack, specify integrations and data flow, split large work into safe phases, and continue the Codex feedback loop until the task is verifiably complete.
+description: Manually invoked Codex engineering copilot for non-programmers. Use this Skill only when the user explicitly selects or mentions @Codex Engineering Copilot (or explicitly asks to use Codex Engineering Copilot). Do not invoke it implicitly for ordinary software, UI, bug, database, architecture, or Codex-related questions. When explicitly invoked, turn natural-language software ideas, screenshots, bugs, Codex replies, and rough product requests into concrete engineering plans and copy-ready Codex execution instructions, preserve project context, recommend or retain the right technology stack, and continue the Codex feedback loop until the task is verifiably complete.
 ---
 
 # Codex Engineering Copilot V4
